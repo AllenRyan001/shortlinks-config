@@ -1,0 +1,23 @@
+# 共享的基础配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    root: INFO
+    com.shortlinks: DEBUG
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      default:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 60s

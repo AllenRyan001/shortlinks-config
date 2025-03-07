@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: shortlink-service
+          uri: lb://shortlink-service
+          predicates:
+            - Path=/api/shorten/**
+        - id: analytics-service
+          uri: lb://analytics-service
+          predicates:
+            - Path=/api/stats/**
+        - id: search-service
+          uri: lb://search-service
+          predicates:
+            - Path=/api/search/**
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+
+# 限流配置
+resilience4j:
+  ratelimiter:
+    instances:
+      default:
+        limitForPeriod: 100
+        limitRefreshPeriod: 1s
+        timeoutDuration: 5s
